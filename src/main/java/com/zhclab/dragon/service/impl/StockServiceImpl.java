@@ -1,6 +1,7 @@
 package com.zhclab.dragon.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -30,6 +31,12 @@ public class StockServiceImpl implements StockService{
 	public Stock get(String stockCode, Date priceDate) {
 		Stock stock = new Stock(stockCode, priceDate);
 		return stockDao.getStock(stock);
+	}
+
+	public List<Stock> getList(String stockCode) {
+		Stock stock = new Stock();
+		stock.setStockCode(stockCode);
+		return stockDao.getList(stock);
 	}
 
 }

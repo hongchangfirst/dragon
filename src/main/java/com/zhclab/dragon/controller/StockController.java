@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.zhclab.dragon.entity.Stock;
 import com.zhclab.dragon.service.StockService;
@@ -28,7 +30,7 @@ public class StockController {
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
     public @ResponseBody
-    String getStock(@RequestParam String stockCode, @RequestParam(required = false) String priceDateStr, HttpServletRequest request) {
+    String getStock(@RequestParam(value = "s") String stockCode, @RequestParam(required = false) String priceDateStr, HttpServletRequest request) {
 		Date priceDate = new Date();
 		if (priceDateStr != null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置显示格式
@@ -57,5 +59,27 @@ public class StockController {
 		System.out.println("start save a stock " + stockCode + " " + priceDate.toString());
 		stockService.saveOrUpdate(stockCode, priceDate, startPrice);
 		return stockCode + " " + priceDate;
+	}
+	
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ModelAndView getStockList(@RequestParam(value = "s") String stockCode, @RequestParam(required = false) String startDateStr, HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("stockList");
+		
+		Date startDate = new Date();
+		if (startDateStr != null) {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置显示格式
+			try {
+				startDate = df.parse(startDateStr);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("start get stock");
+		List<Stock> stockList = stockService.getList(stockCode);
+		System.out.println("end get stock");
+
+		mav.addObject("stockList", stockList);
+		return mav;
 	}
 }
