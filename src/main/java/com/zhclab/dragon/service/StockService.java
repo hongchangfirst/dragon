@@ -8,5 +8,5 @@ import com.zhclab.dragon.entity.Stock;
 public interface StockService {
 	public void saveOrUpdate(String stockCode, Date priceDate, double startPrice);
 	public Stock get(String stockCode, Date priceDate);
-	public List<Stock> getList(String stockCode);
+	public List<Stock> getList(String stockCode, Date priceDate);
 }

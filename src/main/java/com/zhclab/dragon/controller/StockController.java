@@ -27,10 +27,12 @@ public class StockController {
 	@Resource(name = "stockService")
     private StockService stockService;
 	
-	
+	/*
+	 * http://localhost:8000/dragon/stock/get?stock_code=123&priceDateStr=2016-4-11
+	 */
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
     public @ResponseBody
-    String getStock(@RequestParam(value = "s") String stockCode, @RequestParam(required = false) String priceDateStr, HttpServletRequest request) {
+    String getStock(@RequestParam(value = "stock_code") String stockCode, @RequestParam(required = false) String priceDateStr, HttpServletRequest request) {
 		Date priceDate = new Date();
 		if (priceDateStr != null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置显示格式
@@ -44,9 +46,12 @@ public class StockController {
 		return stock.toString();
 	}
 	
+	/*
+	 * http://localhost:8000/dragon/stock/add?stock_code=123&priceDateStr=2016-4-14&startPrice=2000
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
     public @ResponseBody
-    String addStock(@RequestParam String stockCode, @RequestParam(required = false) String priceDateStr, @RequestParam double startPrice, HttpServletRequest request) {
+    String addStock(@RequestParam(value = "stock_code") String stockCode, @RequestParam(required = false) String priceDateStr, @RequestParam double startPrice, HttpServletRequest request) {
 		Date priceDate = new Date();
 		if (priceDateStr != null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置显示格式
@@ -61,8 +66,11 @@ public class StockController {
 		return stockCode + " " + priceDate;
 	}
 	
+	/*
+	 * http://localhost:8000/dragon/stock/list?stock_code=123&start_date=2015-4-10
+	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView getStockList(@RequestParam(value = "s") String stockCode, @RequestParam(required = false) String startDateStr, HttpServletRequest request) {
+    public ModelAndView getStockList(@RequestParam(value = "stock_code") String stockCode, @RequestParam(value = "start_date", required = false) String startDateStr, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("stockList");
 		
@@ -76,7 +84,7 @@ public class StockController {
 			}
 		}
 		System.out.println("start get stock");
-		List<Stock> stockList = stockService.getList(stockCode);
+		List<Stock> stockList = stockService.getList(stockCode, startDate);
 		System.out.println("end get stock");
 
 		mav.addObject("stockList", stockList);

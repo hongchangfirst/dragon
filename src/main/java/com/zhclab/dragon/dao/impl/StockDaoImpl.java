@@ -41,9 +41,9 @@ public class StockDaoImpl implements StockDao {
 	public List<Stock> getList(Stock stock) {
 		Session session = sessionFactory.getCurrentSession();
 		System.out.println("stock code: "+ stock.getStockCode());
-		Query query = session.createQuery("FROM Stock where stock_code = :stockCode");
+		Query query = session.createQuery("FROM Stock where stock_code = :stockCode and price_date >= :priceDate");
 		query.setParameter("stockCode", stock.getStockCode());
-
+		query.setParameter("priceDate", stock.getPriceDate());
 		//Query query = session.createQuery("FROM Stock");
         List<Stock> list = query.list();
         return list;

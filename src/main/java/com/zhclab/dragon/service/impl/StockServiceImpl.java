@@ -33,9 +33,10 @@ public class StockServiceImpl implements StockService{
 		return stockDao.getStock(stock);
 	}
 
-	public List<Stock> getList(String stockCode) {
+	public List<Stock> getList(String stockCode, Date priceDate) {
 		Stock stock = new Stock();
 		stock.setStockCode(stockCode);
+		stock.setPriceDate(priceDate);
 		return stockDao.getList(stock);
 	}
 
